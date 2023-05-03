@@ -1,13 +1,15 @@
 import os
+from dotenv import load_dotenv
 from flask import Flask
 from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from flask_mail import Mail
 
-
+load_dotenv("C:/Users/Antonio/PycharmProjects/pythonProject/pythonProject/Environment_variables/variables.env")
 app = Flask(__name__)
-app.config['SECRET_KEY'] = os.environ.get('CV_SECRET_KEY')
+app.config['SECRET_KEY'] = os.getenv('CV_SECRET_KEY')
+
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
 db = SQLAlchemy(app)
 
