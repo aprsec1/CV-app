@@ -91,10 +91,13 @@ class WorkExperienceForm(FlaskForm):
     job_title = StringField('Job Title', validators=[DataRequired(), Length(min=2, max=100)])
     start_date = DateField('Start Date', format='%Y-%m-%d', validators=[DataRequired()])
     end_date = DateField('End Date', format='%Y-%m-%d')
-    description = TextAreaField('Description')
+    #description = StringField('Description')
     submit = SubmitField('Add Experience')
 
 
+class MultipleWorkExperienceForm(FlaskForm):
+    work_experiences = FieldList(FormField(WorkExperienceForm), min_entries=1)
+    submit = SubmitField('Submit')
 
 class CertificationForm(FlaskForm):
     cert_name = StringField('Certification Name', validators=[DataRequired(), Length(min=2, max=100)])

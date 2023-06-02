@@ -1,7 +1,7 @@
 from CV import app, db, bcrypt, mail
 from flask import render_template, url_for, request, redirect, flash
 from flask_login import login_user, current_user, logout_user, login_required
-from CV.forms import UserForm, LoginForm, UpdateAccountForm, ResetPasswordForm, RequestResetForm, PersonalForm, UserForm, WorkExperienceForm, CertificationForm, EducationForm
+from CV.forms import UserForm, LoginForm, UpdateAccountForm, ResetPasswordForm, RequestResetForm, PersonalForm, UserForm, WorkExperienceForm, CertificationForm, EducationForm, MultipleWorkExperienceForm
 from CV.models import User, WorkExperience, Certification, Education, PersonalInfo
 from PIL import Image
 import secrets, os
@@ -16,6 +16,12 @@ with app.app_context():
 def homepage():
     user_profiles = User.query.all()
     return render_template('home.html', user_profiles=user_profiles)
+
+@app.route("/user/<string:username>")
+def user_profile(username):
+    user = User.query.filter_by(username=username).first_or_404()
+    return render_template('user_profile.html', user=user)
+
 
 @app.route("/about")
 def about():
@@ -118,44 +124,30 @@ def account():
         form1.birth_date.data = personal_info.birth_date
         form1.about.data = personal_info.about
 
-    work_experiences = WorkExperience.query.filter_by(user_id=current_user.user_id).all()
-    forms = []
     form2 = WorkExperienceForm()
-    for work_experience in work_experiences:
-        form2.company_name.data = work_experience.company_name
-        form2.job_title.data = work_experience.job_title
-        form2.start_date.data = work_experience.start_date
-        form2.end_date.data = work_experience.end_date
-        form2.description.data = work_experience.description
-        forms.append(form2)
+    form_work_experience = WorkExperience()
+    if request.method == 'POST' and form2.validate_on_submit():
+        form_work_experience.company_name = form2.company_name.data
+        form_work_experience.job_title = form2.job_title.data
+        form_work_experience.start_date = form2.start_date.data
+        form_work_experience.end_date = form2.end_date.data
+        #form_work_experience.description = form2.description.data
 
-    if request.method == 'POST':
-        for form2 in forms:
-            if form2.validate_on_submit():
-                work_experience = WorkExperience.query.filter_by(user_id=current_user.user_id,
-                                                                 company_name=form2.company_name.data).first()
-                if work_experience:
-                    work_experience.job_title = form2.job_title.data
-                    work_experience.start_date = form2.start_date.data
-                    work_experience.end_date = form2.end_date.data
-                    work_experience.description = form2.description.data
-                else:
-                    work_experience = WorkExperience(
-                        user_id=current_user.user_id,
-                        company_name=form2.company_name.data,
-                        job_title=form2.job_title.data,
-                        start_date=form2.start_date.data,
-                        end_date=form2.end_date.data,
-                        description=form2.description.data
-                    )
-                    db.session.add(work_experience)
-            db.session.commit()
-            flash('Your work experiences have been updated!', 'success')
+        work_exp = WorkExperience(
+            user_id=current_user.user_id,
+            company_name=form_work_experience.company_name,
+            job_title=form_work_experience.job_title,
+            start_date=form_work_experience.start_date,
+            end_date=form_work_experience.end_date
+        )
+        db.session.add(work_exp)
+        db.session.commit()
+        flash('Your work experiences have been updated!', 'success')
         return redirect(url_for('account'))
 
-    return render_template('account.html', title='Account', image_file=image_file, form=form, form1=form1, forms=forms,
-                           form2=form2)
-
+    work_x = WorkExperience.query.all()
+    return render_template('account.html', title='Account', image_file=image_file, form=form, form1=form1,
+                           form2=form2, work_x=work_x)
 
 def send_reset_email(user):
     token = user.generate_confirmation_token()

@@ -131,26 +131,75 @@
         </div>
     </form>
 </div>
-  <h1>Work Experience</h1>
-  <hr>
-  {% for form2 in forms %}
-    <div>
-      <h3>{{ form2.job_title }}</h3>
-      <h4>{{ form2.company_name }}</h4>
-      <p>{{ form2.start_date }} - {{ form2.end_date }}</p>
-      <p>{{ form2.description }}</p>
-    </div>
-    <hr>
-  {% endfor %}
+<div class="content-section">
+    <form method="POST" action="" enctype="multipart/form-data">
+        {{ form2.hidden_tag() }}
+        <fieldset class="form-group">
+            <legend class="border-bottom mb-4">Work Info</legend>
+            <div class="form-group">
+                {{ form2.company_name.label(class="form-control-label") }}
 
-  <h2>Add Work Experience</h2>
-  <form method="POST" action="{{ url_for('account') }}">
-    {{ form2.csrf_token }}
-    {{ form2.job_title.label }} {{ form2.job_title }}
-    {{ form2.company_name.label }} {{ form2.company_name }}
-    {{ form2.start_date.label }} {{ form2.start_date }}
-    {{ form2.end_date.label }} {{ form2.end_date }}
-    {{ form2.description.label }} {{ form2.description }}
-    <button type="submit" class="btn btn-primary">Submit</button>
-  </form>
+                {% if form2.company_name.errors %}
+                {{ form2.company_name(class="form-control form-control-lg is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for error in form2.company_name.errors %}
+                    <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+                {% else %}
+                {{ form2.company_name(class="form-control form-control-lg") }}
+                {% endif %}
+            </div>
+            <div class="form-group">
+                {{ form2.job_title.label(class="form-control-label") }}
+
+                {% if form2.job_title.errors %}
+                {{ form2.job_title(class="form-control form-control-lg is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for error in form2.job_title.errors %}
+                    <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+                {% else %}
+                {{ form2.job_title(class="form-control form-control-lg") }}
+                {% endif %}
+            </div>
+            <div class="form-group">
+                {{ form2.start_date.label(class="form-control-label") }}
+
+                {% if form2.start_date.errors %}
+                {{ form2.start_date(class="form-control form-control-lg is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for error in form2.start_date.errors %}
+                    <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+                {% else %}
+                {{ form2.start_date(class="form-control form-control-lg") }}
+                {% endif %}
+            </div>
+            <div class="form-group">
+                {{ form2.end_date.label(class="form-control-label") }}
+
+                {% if form2.end_date.errors %}
+                {{ form2.end_date(class="form-control form-control-lg is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for error in form2.end_date.errors %}
+                    <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+                {% else %}
+                {{ form2.end_date(class="form-control form-control-lg") }}
+                {% endif %}
+            </div>
+        </fieldset>
+        <div class="form-group">
+            {{ form2.submit(class="btn btn-outline-info") }}
+        </div>
+    </form>
+    <h2>Work Exp List</h2>
+    {% for work in work_x %}
+        <li>{{ work.company_name }} {{ work.job_title }} {{ work.start_date }} {{ work.end_date }}</li>
+    {% endfor %}
+</div>
 {% endblock content %}

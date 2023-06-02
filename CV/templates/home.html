@@ -2,7 +2,11 @@
 {% block content %}
     <h1>Home Test</h1>
     <h2>Home Test2</h2>
-    {% for users in user_profiles.items %}
-
+    {% for users in user_profiles %}
+        <div class="media">
+            <div class="media-body">
+                <a class="mr-2" href="{{url_for('user_profile', username=users.username) }}">{{ users.username }}</a>
+            </div>
+        </div>
     {% endfor %}
 {% endblock content %}
