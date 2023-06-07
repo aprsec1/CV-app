@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileAllowed
 from flask_login import current_user
-from wtforms import StringField, PasswordField, SubmitField, BooleanField, TextAreaField, DateField, FormField, FieldList
+from wtforms import StringField, PasswordField, SubmitField, BooleanField, TextAreaField, DateField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
 from CV.models import User
 from CV import app, db
@@ -54,7 +54,6 @@ class UpdateAccountForm(FlaskForm):
     submit = SubmitField('Update')
 
     #validation:
-
     def validate_username(self, username):
         if username.data != current_user.username:
             user = User.query.filter_by(username=username.data).first()
@@ -95,10 +94,6 @@ class WorkExperienceForm(FlaskForm):
     submit = SubmitField('Add Experience')
 
 
-class MultipleWorkExperienceForm(FlaskForm):
-    work_experiences = FieldList(FormField(WorkExperienceForm), min_entries=1)
-    submit = SubmitField('Submit')
-
 class CertificationForm(FlaskForm):
     cert_name = StringField('Certification Name', validators=[DataRequired(), Length(min=2, max=100)])
     institution = StringField('Institution', validators=[DataRequired(), Length(min=2, max=100)])
@@ -114,26 +109,3 @@ class EducationForm(FlaskForm):
     end_date = DateField('End Date', format='%Y-%m-%d', validators=[DataRequired()])
     description = TextAreaField('Description')
     submit = SubmitField('Add Education')
-
-"""
-def work_experience_form_factory(num_forms):
-    work_experience_forms = []
-    for i in range(num_forms):
-        work_experience_forms.append(WorkExperienceForm())
-    return work_experience_forms
-
-
-def certification_form_factory(num_forms):
-    certification_forms = []
-    for i in range(num_forms):
-        certification_forms.append(CertificationForm())
-    return certification_forms
-
-
-def education_form_factory(num_forms):
-    education_forms = []
-    for i in range(num_forms):
-        education_forms.append(EducationForm())
-    return education_forms
-
-"""

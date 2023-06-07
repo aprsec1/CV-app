@@ -2,7 +2,6 @@ from flask_login import UserMixin
 import jwt
 from CV import app, db, login_manager
 
-
 with app.app_context():
     db.create_all()
 

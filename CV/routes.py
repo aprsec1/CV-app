@@ -1,7 +1,8 @@
 from CV import app, db, bcrypt, mail
 from flask import render_template, url_for, request, redirect, flash
 from flask_login import login_user, current_user, logout_user, login_required
-from CV.forms import UserForm, LoginForm, UpdateAccountForm, ResetPasswordForm, RequestResetForm, PersonalForm, UserForm, WorkExperienceForm, CertificationForm, EducationForm, MultipleWorkExperienceForm
+from CV.forms import LoginForm, UpdateAccountForm, ResetPasswordForm, RequestResetForm, PersonalForm, UserForm, \
+    WorkExperienceForm, CertificationForm, EducationForm
 from CV.models import User, WorkExperience, Certification, Education, PersonalInfo
 from PIL import Image
 import secrets, os
@@ -17,6 +18,12 @@ def homepage():
     user_profiles = User.query.all()
     return render_template('home.html', user_profiles=user_profiles)
 
+
+@app.route("/about")
+def about():
+    return render_template('about.html')
+
+
 @app.route("/user/<int:user_id>")
 def user_profile(user_id):
     user = User.query.filter_by(user_id=user_id).first_or_404()
@@ -26,11 +33,6 @@ def user_profile(user_id):
     educations = Education.query.filter_by(user_id=user_id)
     image_file = url_for('static', filename='profile_pics/' + user.image_file)
     return render_template('user_profile.html', user=user, personal=personal, work1=work1, certs=certs, educations=educations, image_file=image_file)
-
-
-@app.route("/about")
-def about():
-    return render_template('about.html')
 
 
 @app.route("/register", methods=['GET', 'POST'])
@@ -107,7 +109,7 @@ def account():
             personal_info.first_name = form1.first_name.data
             personal_info.last_name = form1.last_name.data
             personal_info.address = form1.address.data
-            personal_info.birth_date = datetime.combine(form1.birth_date.data, datetime.min.time()) #dodati ograničenje za datum rođenja, tipa 18+ godina
+            personal_info.birth_date = datetime.combine(form1.birth_date.data, datetime.min.time())
             personal_info.about = form1.about.data
         else:
             personal_info = PersonalInfo(
@@ -201,6 +203,7 @@ def account():
 
     return render_template('account.html', title='Account', image_file=image_file, form=form, form1=form1,
                            form2=form2, form3=form3, form4=form4, work_x=work_x, edu_x=edu_x, cert_x=cert_x)
+
 
 def send_reset_email(user):
     token = user.generate_confirmation_token()
