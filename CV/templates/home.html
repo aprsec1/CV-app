@@ -5,7 +5,7 @@
     {% for users in user_profiles %}
         <div class="media">
             <div class="media-body">
-                <a class="mr-2" href="{{url_for('user_profile', username=users.username) }}">{{ users.username }}</a>
+                <a class="mr-2" href="{{url_for('user_profile', username=users.username, user_id=users.user_id) }}">{{ users.username }}</a>
             </div>
         </div>
     {% endfor %}

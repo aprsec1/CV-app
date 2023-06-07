@@ -91,7 +91,7 @@ class WorkExperienceForm(FlaskForm):
     job_title = StringField('Job Title', validators=[DataRequired(), Length(min=2, max=100)])
     start_date = DateField('Start Date', format='%Y-%m-%d', validators=[DataRequired()])
     end_date = DateField('End Date', format='%Y-%m-%d')
-    #description = StringField('Description')
+    description = StringField('Description')
     submit = SubmitField('Add Experience')
 
 

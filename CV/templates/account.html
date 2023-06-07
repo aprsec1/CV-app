@@ -192,6 +192,20 @@
                 {{ form2.end_date(class="form-control form-control-lg") }}
                 {% endif %}
             </div>
+            <div class="form-group">
+                {{ form2.description.label(class="form-control-label") }}
+
+                {% if form2.description.errors %}
+                {{ form2.description(class="form-control form-control-lg is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for error in form2.description.errors %}
+                    <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+                {% else %}
+                {{ form2.description(class="form-control form-control-lg") }}
+                {% endif %}
+            </div>
         </fieldset>
         <div class="form-group">
             {{ form2.submit(class="btn btn-outline-info") }}
@@ -199,7 +213,9 @@
     </form>
     <h2>Work Exp List</h2>
     {% for work in work_x %}
-        <li>{{ work.company_name }} {{ work.job_title }} {{ work.start_date }} {{ work.end_date }}</li>
+        <li>{{ work.company_name }} {{ work.job_title }} {{ work.start_date }} {{ work.end_date }} {{ work.description }}</li>
+        <a href="/delete_work_experience/{{ work.work_id }}">Delete</a>
+        <a href="/update_work_experience/{{ work.work_id }}">Update</a>
     {% endfor %}
 </div>
 {% endblock content %}

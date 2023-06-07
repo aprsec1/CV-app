@@ -17,10 +17,13 @@ def homepage():
     user_profiles = User.query.all()
     return render_template('home.html', user_profiles=user_profiles)
 
-@app.route("/user/<string:username>")
-def user_profile(username):
-    user = User.query.filter_by(username=username).first_or_404()
-    return render_template('user_profile.html', user=user)
+@app.route("/user/<int:user_id>")
+def user_profile(user_id):
+    user = User.query.filter_by(user_id=user_id).first_or_404()
+    personal = PersonalInfo.query.filter_by(user_id=user_id).first_or_404()
+    work1 = WorkExperience.query.filter_by(user_id=user_id)
+    image_file = url_for('static', filename='profile_pics/' + user.image_file)
+    return render_template('user_profile.html', user=user, personal=personal, work1=work1, image_file=image_file)
 
 
 @app.route("/about")
@@ -52,7 +55,7 @@ def login():
         user = User.query.filter_by(email=form.email.data).first()
         if user and bcrypt.check_password_hash(user.password, form.password.data):
             login_user(user, remember=form.remember.data)
-            return redirect(url_for('homepage'))
+            return redirect(url_for('account'))
         else:
             flash('Login Unsuccessful. Please check email and password', 'danger')
     return render_template('login.html', title='Login', form=form)
@@ -131,21 +134,22 @@ def account():
         form_work_experience.job_title = form2.job_title.data
         form_work_experience.start_date = form2.start_date.data
         form_work_experience.end_date = form2.end_date.data
-        #form_work_experience.description = form2.description.data
+        form_work_experience.description = form2.description.data
 
         work_exp = WorkExperience(
             user_id=current_user.user_id,
             company_name=form_work_experience.company_name,
             job_title=form_work_experience.job_title,
             start_date=form_work_experience.start_date,
-            end_date=form_work_experience.end_date
+            end_date=form_work_experience.end_date,
+            description=form_work_experience.description
         )
         db.session.add(work_exp)
         db.session.commit()
         flash('Your work experiences have been updated!', 'success')
         return redirect(url_for('account'))
 
-    work_x = WorkExperience.query.all()
+    work_x = WorkExperience.query.filter_by(user_id=current_user.user_id)
     return render_template('account.html', title='Account', image_file=image_file, form=form, form1=form1,
                            form2=form2, work_x=work_x)
 
@@ -189,3 +193,34 @@ def reset_token(token):
         return redirect(url_for('login'))
     return render_template('reset_token.html', title='Reset Password', form=form)
 
+
+@app.route('/delete_work_experience/<int:work_id>', methods=['GET', 'POST'])
+def delete_work_experience(work_id):
+    work2 = WorkExperience.query.get_or_404(work_id)
+    db.session.delete(work2)
+    db.session.commit()
+    flash('Work experience has been deleted!', 'success')
+    return redirect(url_for('account'))
+
+
+@app.route('/update_work_experience/<int:work_id>', methods=['GET', 'POST'])
+def update_work_experience(work_id):
+    work3 = WorkExperience.query.get_or_404(work_id)
+    form_update = WorkExperienceForm()
+    if request.method == 'POST' and form_update.validate_on_submit():
+        work3.company_name = form_update.company_name.data
+        work3.job_title = form_update.job_title.data
+        work3.start_date = form_update.start_date.data
+        work3.end_date = form_update.end_date.data
+        work3.description = form_update.description.data
+        db.session.commit()
+        flash('Work experience has been updated!', 'success')
+        return redirect(url_for('account'))
+
+    if work3:
+        form_update.company_name.data = work3.company_name
+        form_update.job_title.data = work3.job_title
+        form_update.start_date.data = work3.start_date
+        form_update.end_date.data = work3.end_date
+        form_update.description.data = work3.description
+    return render_template('update_work_experience.html', form=form_update, work=work3)
