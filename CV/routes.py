@@ -150,8 +150,33 @@ def account():
         return redirect(url_for('account'))
 
     work_x = WorkExperience.query.filter_by(user_id=current_user.user_id)
+
+    form3 = EducationForm()
+    form_education = Education()
+    if request.method == 'POST' and form3.validate_on_submit():
+        form_education.institution_name = form3.institution_name.data
+        form_education.degree = form3.degree.data
+        form_education.start_date = form3.start_date.data
+        form_education.end_date = form3.end_date.data
+        form_education.description = form3.description.data
+
+        education = Education(
+            user_id=current_user.user_id,
+            institution_name=form_education.institution_name,
+            degree=form_education.degree,
+            start_date=form_work_experience.start_date,
+            end_date=form_work_experience.end_date,
+            description=form_work_experience.description
+        )
+        db.session.add(education)
+        db.session.commit()
+        flash('Your education have been updated!', 'success')
+        return redirect(url_for('account'))
+
+    edu_x = Education.query.filter_by(user_id=current_user.user_id)
+
     return render_template('account.html', title='Account', image_file=image_file, form=form, form1=form1,
-                           form2=form2, work_x=work_x)
+                           form2=form2, work_x=work_x, edu_x=edu_x)
 
 def send_reset_email(user):
     token = user.generate_confirmation_token()
