@@ -7,10 +7,29 @@
     <h4>Email: {{ user.email }}</h4>
     <h4>{{ personal.first_name }} {{ personal.last_name }} </h4>
     <h4>About: {{ personal.about }}</h4>
-    <h2>Work Exp List</h2>
+    <h2>Work Experience</h2>
     {% for work in work1 %}
-        <li>{{ work.company_name }} {{ work.job_title }} {{ work.start_date }} {{ work.end_date }} {{ work.description }}</li>
+        <div class="form-group">
+            <h4>{{ work.company_name }}</h4>
+            <h5>{{ work.job_title }}</h5>
+            <p>{{ work.start_date }}  -  {{ work.end_date }}<br> {{ work.description }}<br></p>
+        </div>
+    {% endfor %}
+    <h2>Education</h2>
+    {% for edu in educations %}
+        <div class="form-group">
+            <h4>{{ edu.institution_name }}</h4>
+            <h5>{{ edu.degree }}</h5>
+            <p>{{ edu.start_date }}  -  {{ edu.end_date }}<br> {{ edu.description }}<br></p>
+        </div>
+    {% endfor %}
+    <h2>Cert List</h2>
+    {% for cert in certs %}
+        <div class="form-group">
+            <h4>{{ cert.cert_name }}</h4>
+            <h5>{{ cert.institution }}</h5>
+            <p>{{ cert.date_earned }}  -  {{ cert.date_expired }}</p>
+        </div>
     {% endfor %}
     </body>
-
 {% endblock content %}

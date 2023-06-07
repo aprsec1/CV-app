@@ -8,6 +8,10 @@ h1, h2, h3, h4, h5, h6 {
   color: #444444;
 }
 
+a {
+
+}
+
 .bg-steel {
   background-color: #5f788a;
 }
@@ -86,4 +90,9 @@ a.article-title:hover {
 .col {
   flex: 1;
   padding: 10px;
+}
+
+a.users {
+    font-size: 2rem;
+    color: #5f788a;
 }

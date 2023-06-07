@@ -44,7 +44,7 @@
                 {{ form.picture(class="form-control-file") }}
                 {% if form.picture.errors %}
                 {% for error in form.picture.errors %}
-                <span class="text-danger">{{ error }}</span></br>
+                <span class="text-danger">{{ error }}</span><br>
                 {% endfor %}
                 {% endif %}
             </div>
@@ -226,6 +226,192 @@
             <div class="form-group">
                 <a class="btn btn-outline-info" href="/update_work_experience/{{ work.work_id }}">Update</a><br><br>
                 <a class="btn btn-outline-info" href="/delete_work_experience/{{ work.work_id }}">Delete</a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+<div class="content-section">
+    <form method="POST" action="" enctype="multipart/form-data">
+        {{ form3.hidden_tag() }}
+        <fieldset class="form-group">
+            <legend class="border-bottom mb-4">Add Education</legend>
+            <div class="form-group">
+                {{ form3.institution_name.label(class="form-control-label") }}
+
+                {% if form3.institution_name.errors %}
+                {{ form3.institution_name(class="form-control form-control-lg is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for error in form3.institution_name.errors %}
+                    <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+                {% else %}
+                {{ form3.institution_name(class="form-control form-control-lg") }}
+                {% endif %}
+            </div>
+            <div class="form-group">
+                {{ form3.degree.label(class="form-control-label") }}
+
+                {% if form3.degree.errors %}
+                {{ form3.degree(class="form-control form-control-lg is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for error in form3.degree.errors %}
+                    <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+                {% else %}
+                {{ form3.degree(class="form-control form-control-lg") }}
+                {% endif %}
+            </div>
+            <div class="form-group">
+                {{ form3.start_date.label(class="form-control-label") }}
+
+                {% if form3.start_date.errors %}
+                {{ form3.start_date(class="form-control form-control-lg is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for error in form3.start_date.errors %}
+                    <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+                {% else %}
+                {{ form3.start_date(class="form-control form-control-lg") }}
+                {% endif %}
+            </div>
+            <div class="form-group">
+                {{ form3.end_date.label(class="form-control-label") }}
+
+                {% if form3.end_date.errors %}
+                {{ form3.end_date(class="form-control form-control-lg is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for error in form3.end_date.errors %}
+                    <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+                {% else %}
+                {{ form3.end_date(class="form-control form-control-lg") }}
+                {% endif %}
+            </div>
+            <div class="form-group">
+                {{ form3.description.label(class="form-control-label") }}
+
+                {% if form3.description.errors %}
+                {{ form3.description(class="form-control form-control-lg is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for error in form3.description.errors %}
+                    <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+                {% else %}
+                {{ form3.description(class="form-control form-control-lg") }}
+                {% endif %}
+            </div>
+        </fieldset>
+        <div class="form-group">
+            {{ form3.submit(class="btn btn-outline-info") }}
+        </div>
+    </form>
+    <legend class="border-bottom mb-4">Education</legend>
+    {% for edu in edu_x %}
+    <div class="row">
+        <div class="col">
+            <div class="form-group">
+                <h4>{{ edu.institution_name }}</h4>
+                <h5>{{ edu.degree }}</h5>
+                <p>{{ edu.start_date }}  -  {{ edu.end_date }}<br> {{ edu.description }}<br></p>
+            </div>
+            <legend class="border-bottom mb-4"></legend>
+        </div>
+        <div class="col">
+            <div class="form-group">
+                <a class="btn btn-outline-info" href="/update_education/{{ edu.edu_id }}">Update</a><br><br>
+                <a class="btn btn-outline-info" href="/delete_education/{{ edu.edu_id }}">Delete</a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+<div class="content-section">
+    <form method="POST" action="" enctype="multipart/form-data">
+        {{ form4.hidden_tag() }}
+        <fieldset class="form-group">
+            <legend class="border-bottom mb-4">Add Cetificates</legend>
+            <div class="form-group">
+                {{ form4.cert_name.label(class="form-control-label") }}
+
+                {% if form4.cert_name.errors %}
+                {{ form4.cert_name(class="form-control form-control-lg is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for error in form4.cert_name.errors %}
+                    <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+                {% else %}
+                {{ form4.cert_name(class="form-control form-control-lg") }}
+                {% endif %}
+            </div>
+            <div class="form-group">
+                {{ form4.institution.label(class="form-control-label") }}
+
+                {% if form4.institution.errors %}
+                {{ form4.institution(class="form-control form-control-lg is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for error in form4.institution.errors %}
+                    <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+                {% else %}
+                {{ form4.institution(class="form-control form-control-lg") }}
+                {% endif %}
+            </div>
+            <div class="form-group">
+                {{ form4.date_earned.label(class="form-control-label") }}
+
+                {% if form4.date_earned.errors %}
+                {{ form4.date_earned(class="form-control form-control-lg is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for error in form4.date_earned.errors %}
+                    <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+                {% else %}
+                {{ form4.date_earned(class="form-control form-control-lg") }}
+                {% endif %}
+            </div>
+            <div class="form-group">
+                {{ form4.date_expired.label(class="form-control-label") }}
+
+                {% if form4.date_expired.errors %}
+                {{ form4.date_expired(class="form-control form-control-lg is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for error in form4.date_expired.errors %}
+                    <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+                {% else %}
+                {{ form4.date_expired(class="form-control form-control-lg") }}
+                {% endif %}
+            </div>
+        </fieldset>
+        <div class="form-group">
+            {{ form4.submit(class="btn btn-outline-info") }}
+        </div>
+    </form>
+    <legend class="border-bottom mb-4">Certificates</legend>
+    {% for cert in cert_x %}
+    <div class="row">
+        <div class="col">
+            <div class="form-group">
+                <h4>{{ cert.cert_name }}</h4>
+                <h5>{{ cert.institution }}</h5>
+                <p>{{ cert.date_earned }}  -  {{ cert.date_expired }}</p>
+            </div>
+            <legend class="border-bottom mb-4"></legend>
+        </div>
+        <div class="col">
+            <div class="form-group">
+                <a class="btn btn-outline-info" href="/update_certification/{{ cert.cert_id }}">Update</a><br><br>
+                <a class="btn btn-outline-info" href="/delete_certification/{{ cert.cert_id }}">Delete</a>
             </div>
         </div>
     </div>

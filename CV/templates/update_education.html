@@ -1,0 +1,45 @@
+{% extends "layout.html" %}
+{% block content %}
+<h1>Update Work Experience</h1>
+  <form method="POST" action="{{ url_for('update_education', edu_id=edu.edu_id) }}">
+    {{ form.hidden_tag() }}
+    <div class="form-group">
+      {{ form.institution_name.label(class="form-label") }}
+      {{ form.institution_name(class="form-control") }}
+      {% for error in form.institution_name.errors %}
+        <span class="text-danger">{{ error }}</span>
+      {% endfor %}
+    </div>
+    <div class="form-group">
+      {{ form.degree.label(class="form-label") }}
+      {{ form.degree(class="form-control") }}
+      {% for error in form.degree.errors %}
+        <span class="text-danger">{{ error }}</span>
+      {% endfor %}
+    </div>
+    <div class="form-group">
+      {{ form.start_date.label(class="form-label") }}
+      {{ form.start_date(class="form-control") }}
+      {% for error in form.start_date.errors %}
+        <span class="text-danger">{{ error }}</span>
+      {% endfor %}
+    </div>
+    <div class="form-group">
+      {{ form.end_date.label(class="form-label") }}
+      {{ form.end_date(class="form-control") }}
+      {% for error in form.end_date.errors %}
+        <span class="text-danger">{{ error }}</span>
+      {% endfor %}
+    </div>
+    <div class="form-group">
+      {{ form.description.label(class="form-label") }}
+      {{ form.description(class="form-control") }}
+      {% for error in form.description.errors %}
+        <span class="text-danger">{{ error }}</span>
+      {% endfor %}
+    </div>
+    <div class="form-group">
+      <button type="submit" class="btn btn-primary">Update</button>
+    </div>
+  </form>
+{% endblock content %}

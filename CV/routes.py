@@ -22,8 +22,10 @@ def user_profile(user_id):
     user = User.query.filter_by(user_id=user_id).first_or_404()
     personal = PersonalInfo.query.filter_by(user_id=user_id).first_or_404()
     work1 = WorkExperience.query.filter_by(user_id=user_id)
+    certs = Certification.query.filter_by(user_id=user_id)
+    educations = Education.query.filter_by(user_id=user_id)
     image_file = url_for('static', filename='profile_pics/' + user.image_file)
-    return render_template('user_profile.html', user=user, personal=personal, work1=work1, image_file=image_file)
+    return render_template('user_profile.html', user=user, personal=personal, work1=work1, certs=certs, educations=educations, image_file=image_file)
 
 
 @app.route("/about")
@@ -164,9 +166,9 @@ def account():
             user_id=current_user.user_id,
             institution_name=form_education.institution_name,
             degree=form_education.degree,
-            start_date=form_work_experience.start_date,
-            end_date=form_work_experience.end_date,
-            description=form_work_experience.description
+            start_date=form_education.start_date,
+            end_date=form_education.end_date,
+            description=form_education.description
         )
         db.session.add(education)
         db.session.commit()
@@ -175,8 +177,30 @@ def account():
 
     edu_x = Education.query.filter_by(user_id=current_user.user_id)
 
+    form4 = CertificationForm()
+    form_cert = Certification()
+    if request.method == 'POST' and form4.validate_on_submit():
+        form_cert.cert_name = form4.cert_name.data
+        form_cert.institution = form4.institution.data
+        form_cert.date_earned = form4.date_earned.data
+        form_cert.date_expired = form4.date_expired.data
+
+        certs = Certification(
+            user_id=current_user.user_id,
+            cert_name=form_cert.cert_name,
+            institution=form_cert.institution,
+            date_earned=form_cert.date_earned,
+            date_expired=form_cert.date_expired,
+        )
+        db.session.add(certs)
+        db.session.commit()
+        flash('Your education have been updated!', 'success')
+        return redirect(url_for('account'))
+
+    cert_x = Certification.query.filter_by(user_id=current_user.user_id)
+
     return render_template('account.html', title='Account', image_file=image_file, form=form, form1=form1,
-                           form2=form2, work_x=work_x, edu_x=edu_x)
+                           form2=form2, form3=form3, form4=form4, work_x=work_x, edu_x=edu_x, cert_x=cert_x)
 
 def send_reset_email(user):
     token = user.generate_confirmation_token()
@@ -249,3 +273,65 @@ def update_work_experience(work_id):
         form_update.end_date.data = work3.end_date
         form_update.description.data = work3.description
     return render_template('update_work_experience.html', form=form_update, work=work3)
+
+
+@app.route('/delete_education/<int:edu_id>', methods=['GET', 'POST'])
+def delete_education(edu_id):
+    edu1 = Education.query.get_or_404(edu_id)
+    db.session.delete(edu1)
+    db.session.commit()
+    flash('Work experience has been deleted!', 'success')
+    return redirect(url_for('account'))
+
+
+@app.route('/update_education/<int:edu_id>', methods=['GET', 'POST'])
+def update_education(edu_id):
+    edu2 = Education.query.get_or_404(edu_id)
+    edu_update = EducationForm()
+    if request.method == 'POST' and edu_update.validate_on_submit():
+        edu2.institution_name = edu_update.institution_name.data
+        edu2.degree = edu_update.degree.data
+        edu2.start_date = edu_update.start_date.data
+        edu2.end_date = edu_update.end_date.data
+        edu2.description = edu_update.description.data
+        db.session.commit()
+        flash('Work experience has been updated!', 'success')
+        return redirect(url_for('account'))
+
+    if edu2:
+        edu_update.institution_name.data = edu2.institution_name
+        edu_update.degree.data = edu2.degree
+        edu_update.start_date.data = edu2.start_date
+        edu_update.end_date.data = edu2.end_date
+        edu_update.description.data = edu2.description
+    return render_template('update_education.html', form=edu_update, edu=edu2)
+
+
+@app.route('/delete_certification/<int:cert_id>', methods=['GET', 'POST'])
+def delete_certification(cert_id):
+    cert1 = Certification.query.get_or_404(cert_id)
+    db.session.delete(cert1)
+    db.session.commit()
+    flash('Your certificate has been deleted!', 'success')
+    return redirect(url_for('account'))
+
+
+@app.route('/update_certification/<int:cert_id>', methods=['GET', 'POST'])
+def update_certification(cert_id):
+    cert2 = Certification.query.get_or_404(cert_id)
+    cert_update = CertificationForm()
+    if request.method == 'POST' and cert_update.validate_on_submit():
+        cert2.cert_name = cert_update.cert_name.data
+        cert2.institution = cert_update.institution.data
+        cert2.date_earned = cert_update.date_earned.data
+        cert2.date_expired = cert_update.date_expired.data
+        db.session.commit()
+        flash('Your certificate has been updated!', 'success')
+        return redirect(url_for('account'))
+
+    if cert2:
+        cert_update.cert_name.data = cert2.cert_name
+        cert_update.institution.data = cert2.institution
+        cert_update.date_earned.data = cert2.date_earned
+        cert_update.date_expired.data = cert2.date_expired
+    return render_template('update_certification.html', form=cert_update, cert=cert2)

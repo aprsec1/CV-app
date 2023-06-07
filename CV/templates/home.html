@@ -1,11 +1,10 @@
 {% extends "layout.html" %}
 {% block content %}
-    <h1>Home Test</h1>
-    <h2>Home Test2</h2>
+    <h3>Registered Users:</h3>
     {% for users in user_profiles %}
         <div class="media">
             <div class="media-body">
-                <a class="mr-2" href="{{url_for('user_profile', username=users.username, user_id=users.user_id) }}">{{ users.username }}</a>
+                <a class="users" href="{{url_for('user_profile', username=users.username, user_id=users.user_id) }}">{{ users.username }}</a>
             </div>
         </div>
     {% endfor %}

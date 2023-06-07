@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 {% block content %}
-<h1>Update Work Experience</h1>
-  <form method="POST" action="{{ url_for('update_work_experience', cert_id=cert.work_id) }}">
+<h1>Update Certification</h1>
+  <form method="POST" action="{{ url_for('update_certification', cert_id=cert.cert_id) }}">
     {{ form.hidden_tag() }}
     <div class="form-group">
       {{ form.cert_name.label(class="form-label") }}
